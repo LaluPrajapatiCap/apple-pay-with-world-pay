@@ -15,16 +15,16 @@ const ApplePayButton = () => {
       }
 
       // validate whether the user has an active card in Wallet with apple pay supported device
-      const merchantIdentifier = "example.com.store";
-      const result1 =
-        window.ApplePaySession.canMakePaymentsWithActiveCard(
-          merchantIdentifier
-        );
-      result1.then(function (canMakePayments) {
-        if (canMakePayments) {
-          setShowAppleButton(true);
-        }
-      });
+      // const merchantIdentifier = "example.com.store";
+      // const result1 =
+      //   window.ApplePaySession.canMakePaymentsWithActiveCard(
+      //     merchantIdentifier
+      //   );
+      // result1.then(function (canMakePayments) {
+      //   if (canMakePayments) {
+      //     setShowAppleButton(true);
+      //   }
+      // });
     }
   };
 
@@ -41,7 +41,7 @@ const ApplePayButton = () => {
       },
     };
 
-    const session = new ApplePaySession(versionNumber, paymentRequest);
+    const session = new window.ApplePaySession(versionNumber, paymentRequest);
 
     // merchant validation to authenticate from device (applewatch/iphone/Mac etc.)
     session.onvalidatemerchant = (event) => {
@@ -88,8 +88,8 @@ const ApplePayButton = () => {
           console.log("onpaymentauthorizedSuccess", res);
           session.completePayment(
             res.success // will be replaced by actual key from response
-              ? ApplePaySession.STATUS_SUCCESS
-              : ApplePaySession.STATUS_FAILURE
+              ? window.ApplePaySession.STATUS_SUCCESS
+              : window.ApplePaySession.STATUS_FAILURE
           );
         })
         .catch((error) => {
@@ -108,7 +108,11 @@ const ApplePayButton = () => {
   return (
     <div className="apple-pay-button-container">
       {showAppleButton && (
-        <Button ariaLabel="Apple Pay" styleName="apple-pay-button" />
+        <Button
+          ariaLabel="Apple Pay"
+          styleName="apple-pay-button"
+          handleClick={handleAppleSession}
+        />
       )}
     </div>
   );
